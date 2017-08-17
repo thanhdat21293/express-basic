@@ -1,0 +1,42 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        {% if data.length > 0 %}
+        <table class="table">
+          <thead class="thead-default">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set total = 0 %}
+
+            {% for item in data %}
+            {% set total = total + cart[item.id] * item.price %}
+            <tr>
+              <th scope="row">{{item.id}}</th>
+              <td>{{item.title}}</td>
+              <td>{{item.price}}</td>
+              <td>{{cart[item.id]}}</td>
+              <td>{{ cart[item.id] * item.price }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <h3>Tổng: ${{total}}</h3>
+        {% else %}
+            Không có sản phẩm trong giỏ.
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

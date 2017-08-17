@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  data-toggle="modal" data-target="#exampleModal" href="#">Sign in / Sign up</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/shop">Shop</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/cart">Cart</a>
+                  </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </div>
+            </nav>
+        </div>
+    </div>
+</div>
+    {% block content %}
+
+    {% endblock %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#signin" role="tab" aria-controls="signin" aria-expanded="true">Sign in</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#signup" role="tab" aria-controls="signup" aria-expanded="true">Sign up</a>
+            </li>
+          </ul>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+            <div class="alert alert-success wsalert wslogin-s" role="alert">
+
+            </div>
+            <div class="alert alert-warning wsalert wslogin-w" role="alert">
+
+            </div>
+            <form id="formlogin">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="email" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+              <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+            </form>
+          </div>
+          <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+            <div class="alert alert-success wsalert wssignup-s" role="alert">
+              This is a success alert—check it out!
+            </div>
+            <div class="alert alert-warning wsalert wssignup-w" role="alert">
+              This is a warning alert—check it out!
+            </div>
+            <form id="formsignup">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Confirm password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm password">
+              </div>
+              <button type="button" class="btn btn-primary" onclick="signUp()">Sign up</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function signUp() {
+        jQuery('.wsalert').removeClass('ok')
+        let formData = jQuery('form#formsignup').serialize();
+        axios.post('/signup', formData)
+            .then(res => {
+              if(res.data.msg) {
+                  jQuery('.wssignup-s').addClass('ok')
+                  jQuery('.wssignup-s').text(res.data.msg)
+              }else{
+                  jQuery('.wssignup-w').addClass('ok')
+                  jQuery('.wssignup-w').text(res.data.msgErr)
+              }
+            })
+            .catch(err => {
+                  jQuery('.wssignup-w').addClass('ok')
+                  jQuery('.wssignup-w').text(err.message)
+            })
+    }
+
+    function login() {
+        jQuery('.wsalert').removeClass('ok')
+        let formData = jQuery('form#formlogin').serialize();
+        axios.post('/login', formData)
+            .then(res => {
+              if(res.data.msg) {
+                  jQuery('.wslogin-s').addClass('ok')
+                  jQuery('.wslogin-s').text(res.data.msg)
+              }else{
+                  jQuery('.wslogin-w').addClass('ok')
+                  jQuery('.wslogin-w').text(res.data.msgErr)
+              }
+            })
+            .catch(err => {
+                  jQuery('.wslogin-w').addClass('ok')
+                  jQuery('.wslogin-w').text(err.message)
+            })
+    }
+</script>
+<style>
+  .wsalert{
+    display:none;
+  }
+  .wsalert.ok {
+    display:block;
+  }
+</style>
+</body>
+
+</html>

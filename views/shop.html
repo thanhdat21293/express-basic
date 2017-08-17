@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+
+        {% for item in data %}
+        <div class="col-4">
+            <div class="card" style="width: 20rem;">
+              <div class="card-body">
+                    <h4 class="card-title">{{item.title}}</h4>
+                    <p class="card-text">{{item.content}}</p>
+                    <h3>${{item.price}}</h3>
+                    <a href="?addtocart={{item.id}}" class="btn btn-primary">Add to cart</a>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
