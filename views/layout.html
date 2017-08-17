@@ -113,17 +113,26 @@
 
 <script>
     function signUp() {
-        jQuery('.wsalert').removeClass('ok')
+        jQuery('.wsalert').slideUp('fast')
         let formData = jQuery('form#formsignup').serialize();
         axios.post('/signup', formData)
             .then(res => {
-              if(res.data.msg) {
-                  jQuery('.wssignup-s').addClass('ok')
+
+                if(res.data.msg){
+                  jQuery('.wssignup-s').slideDown('ok')
                   jQuery('.wssignup-s').text(res.data.msg)
-              }else{
-                  jQuery('.wssignup-w').addClass('ok')
+                }else{
+                    jQuery('.wssignup-w').slideDown('ok')
                   jQuery('.wssignup-w').text(res.data.msgErr)
-              }
+                }
+
+//              if(res.data.msg) {
+//                  jQuery('.wssignup-s').addClass('ok')
+//                  jQuery('.wssignup-s').text(res.data.msg)
+//              }else{
+//                  jQuery('.wssignup-w').addClass('ok')
+//                  jQuery('.wssignup-w').text(res.data.msgErr)
+//              }
             })
             .catch(err => {
                   jQuery('.wssignup-w').addClass('ok')
@@ -136,6 +145,7 @@
         let formData = jQuery('form#formlogin').serialize();
         axios.post('/login', formData)
             .then(res => {
+                console.log(res)
               if(res.data.msg) {
                   jQuery('.wslogin-s').addClass('ok')
                   jQuery('.wslogin-s').text(res.data.msg)

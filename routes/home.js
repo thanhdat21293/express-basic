@@ -45,20 +45,21 @@ let shop = [
 module.exports = (express) => {
     router = express.Router();
 
-    router.get('/', (req, res) => {
-        res.send('Hello world! 1')
-    });
-
     // router.get('/', (req, res) => {
-    //     let user = req.session.user || 'guest'
-    //     res.render('index', {
-    //         user: user
-    //     })
+    //     res.send('Hello world! 1')
     // });
+
+    router.get('/', (req, res) => {
+        let user = req.session.user || 'guest'
+        res.render('index', {
+            user: user
+        })
+    });
 
     router.post('/signup', (req, res) => {
         let username = req.body.username;
         let password = req.body.password;
+
         if(password[0] !== password[1]){
             res.json({msgErr: 'Mật khẩu không trùng nhau.'})
         }else{
@@ -100,12 +101,9 @@ module.exports = (express) => {
         let q = req.query.addtocart;
         if(q !== undefined || q > 0){
             if(req.session.cart[q]) {
-                console.log(1)
-                let qty = req.session.cart[q];
-                req.session.cart[q] = qty + 1;
-            }else{
-                console.log(2)
-                req.session.cart[q] = 1
+                req.session.cart[q] += 1;
+            }else {
+                req.session.cart[q] = 1;
             }
         }
         res.render('shop', {
@@ -121,11 +119,18 @@ module.exports = (express) => {
             if(cart[item.id]) {
                 data.push(item)
             }
-        })
+        });
         res.render('cart', {
             data: data,
             cart: req.session.cart
         })
+    });
+
+    //req.params
+    //req.query
+    //req.body
+    router.get('/data', (req, res) => {
+        console.log(req.query)
     });
 
     return router
